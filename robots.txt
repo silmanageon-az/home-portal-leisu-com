@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://silmanageon-az.github.io/home-portal-leisu-com/sitemap.xml

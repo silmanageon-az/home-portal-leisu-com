@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雷速 · 信息聚合与内容呈现</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e1e24;
+            background-color: #f5f3f0;
+        }
+        /* 深色头图 */
+        .hero {
+            background: linear-gradient(145deg, #0b0b12 0%, #1c1b26 100%);
+            color: #eceae5;
+            padding: 3.5rem 1.5rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -20%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(90, 120, 210, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.6rem;
+            position: relative;
+            z-index: 1;
+        }
+        .hero .sub {
+            font-size: 1.1rem;
+            color: #b7b3ae;
+            max-width: 640px;
+            margin: 0.5rem auto 0;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        .hero .sub strong {
+            color: #cdc9c2;
+            font-weight: 400;
+        }
+        /* 浅色正文区 */
+        .content-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2.8rem 1.5rem 3.6rem;
+        }
+        /* 卡片模块 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+            margin: 2.4rem 0 2.8rem;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1.8rem 1.6rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03);
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.03);
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.7rem;
+            color: #1e1e24;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .card p {
+            font-size: 0.98rem;
+            color: #3a3842;
+            line-height: 1.65;
+        }
+        .card p + p {
+            margin-top: 1rem;
+        }
+        /* 强调色用于链接 */
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 450;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        a:hover {
+            color: #1d4ed8;
+            border-bottom-color: #1d4ed8;
+        }
+        .inline-link {
+            white-space: nowrap;
+        }
+        /* 使用场景、提示等文字区 */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 450;
+            margin: 2.6rem 0 1rem;
+            color: #1e1e24;
+            letter-spacing: -0.01em;
+        }
+        .text-block {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1.8rem 1.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            margin-bottom: 2rem;
+        }
+        .text-block p {
+            margin-bottom: 0.9rem;
+        }
+        .text-block ul {
+            list-style: none;
+            padding-left: 0.2rem;
+            margin: 1rem 0 0.2rem;
+        }
+        .text-block li {
+            position: relative;
+            padding-left: 1.8rem;
+            margin-bottom: 0.6rem;
+            color: #2e2d34;
+        }
+        .text-block li::before {
+            content: "·";
+            position: absolute;
+            left: 0.4rem;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1.2;
+        }
+        .faq-item {
+            padding: 0.6rem 0;
+        }
+        .faq-item strong {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+            color: #1e1e24;
+        }
+        .faq-item p {
+            margin: 0.2rem 0 0.6rem;
+            color: #45424e;
+        }
+        .subtle-note {
+            background: #edeae5;
+            border-radius: 40px;
+            padding: 1rem 1.8rem;
+            margin-top: 1.8rem;
+            font-size: 0.95rem;
+            color: #2e2d34;
+            border-left: 4px solid #2563eb;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #d8d4ce;
+            margin: 2.2rem 0 1.2rem;
+            opacity: 0.5;
+        }
+        footer {
+            text-align: center;
+            padding: 2.8rem 1rem 2rem;
+            color: #6b6770;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0dcd6;
+            margin-top: 1rem;
+        }
+        /* 响应式 */
+        @media (max-width: 680px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .sub { font-size: 0.98rem; }
+            .card-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .content-wrap { padding: 1.8rem 1rem 2.8rem; }
+            .text-block { padding: 1.4rem; }
+        }
+        @media (min-width: 1200px) {
+            .hero { padding: 4.6rem 2rem 3.8rem; }
+            .hero h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>雷速 · 信息聚合与内容呈现</h1>
+    <div class="sub">围绕<strong>主题内容</strong>，提供简洁有序的阅读与浏览体验</div>
+</header>
+
+<main class="content-wrap">
+
+    <!-- 摘要 / 引入 -->
+    <div class="text-block">
+        <p>在信息快速流动的当下，如何将分散的内容以清晰、低干扰的方式组合起来，成为许多人日常面对的小课题。<a href="https://home-portal-leisu.com" class="inline-link">雷速</a>所关注的，正是这样一件事：围绕特定主题，把相关的摘要、亮点、背景与使用建议以平实的方式组织在一起，让浏览者可以快速建立整体认知，而不必在多个页面之间频繁跳转。</p>
+        <p>这个页面呈现的是一种内容组织思路——你可以把它看作一个“主题卡片式”的索引。无论是个人项目介绍、兴趣领域整理，还是轻量级的产品说明，都可以借助类似的结构让信息更友好。</p>
+    </div>
+
+    <!-- 亮点卡片 -->
+    <h2 class="section-title">几个值得留意的特点</h2>
+    <div class="card-grid">
+        <div class="card">
+            <h3>📋 摘要先行</h3>
+            <p>每个模块都先给出最核心的几句话，避免信息淹没在细节里。阅读者可以快速决定是否深入，而不是陷入大段文本。</p>
+        </div>
+        <div class="card">
+            <h3>🎯 亮点独立成块</h3>
+            <p>关键功能或内容特点用短卡片呈现，视觉上区隔清晰。颜色、间距都保持克制，让内容本身成为焦点。</p>
+        </div>
+        <div class="card">
+            <h3>🔄 场景化建议</h3>
+            <p>不只是罗列功能，还会结合具体的使用场景给出提示——比如内容整理、个人导航页、兴趣聚合等，方便对照参考。</p>
+        </div>
+        <div class="card">
+            <h3>🔗 链接自然融入</h3>
+            <p>指向 <a href="https://home-portal-leisu.com">雷速</a> 的链接被嵌入在句子或段落中，不打断阅读节奏，也不生硬地要求点击。你可以根据自己的需要决定是否进一步了解。</p>
+        </div>
+    </div>
+
+    <!-- 使用建议 / 场景 -->
+    <div class="text-block">
+        <h3 style="font-weight:500; margin-bottom:0.6rem;">可能适合的使用方式</h3>
+        <ul>
+            <li>作为某个兴趣主题的“起始页”，把常用的链接、简介、更新动态放在一起。</li>
+            <li>为小型项目或作品集生成一个轻量介绍页，替代冗长的文档开头。</li>
+            <li>整理阅读笔记或知识碎片，用卡片+摘要的结构让回顾更高效。</li>
+            <li>如果你需要构建一个内容门户的雏形，<a href="https://home-portal-leisu.com">雷速</a>的布局思路可以提供一份参考——不重样式炫技，重在信息的有序传递。</li>
+        </ul>
+        <p style="margin-top:1.2rem;">当然，这只是一个起点。你可以根据自己的需求调整内容模块、卡片数量，甚至替换配色和字体。形式服务于内容，这是贯穿始终的出发点。</p>
+    </div>
+
+    <!-- FAQ 摘要 + 可信且克制的说明 -->
+    <h2 class="section-title">一些你可能想了解的</h2>
+    <div class="text-block" style="padding-bottom:1.2rem;">
+        <div class="faq-item">
+            <strong>这个页面是做什么的？</strong>
+            <p>它是一份产品说明式的介绍页，围绕“雷速”这个关键词展示内容聚合与呈现的思路。没有夸大承诺，也没有隐藏的诱导——所有信息都以真实、克制的态度呈现。</p>
+        </div>
+        <div class="faq-item">
+            <strong>链接应该怎么使用？</strong>
+            <p>页面中的链接都指向 <a href="https://home-portal-leisu.com">雷速</a>，它们被放置在上下文中，你可以根据兴趣决定是否点开。链接文本只包含名称本身，不附加“进入”“查看”等指令词，保持自然。</p>
+        </div>
+        <div class="faq-item">
+            <strong>我可以借鉴这个结构吗？</strong>
+            <p>当然。这里的 HTML 和 CSS 都是开放可用的。你可以复制、调整，用于个人或非商业项目。如果你需要更完整的门户功能，<a href="https://home-portal-leisu.com">雷速</a>可能提供一些额外的思路。</p>
+        </div>
+        <div class="faq-item">
+            <strong>内容会不会过时？</strong>
+            <p>介绍页本身展示的是组织方法，不依赖时效性很强的数据。但如果链接指向的站点有更新，建议你自行核对。我们不会在这里放置未经验证的数据或功能承诺。</p>
+        </div>
+    </div>
+
+    <!-- 一条温和的提示 -->
+    <div class="subtle-note">
+        💡 提示：你可以把当前页面的结构当作一个“内容框架”来使用。替换文本、调整卡片、增减章节——让它更贴合你手头的事情。保持简洁，比什么都重要。
+    </div>
+
+    <hr>
+
+    <!-- 结尾段落，再次自然包含链接 -->
+    <p style="font-size:0.98rem; color:#3a3842; max-width:720px;">
+        如果你对这类内容组织方式感兴趣，不妨花几分钟浏览一下 <a href="https://home-portal-leisu.com">雷速</a> 所呈现的完整形态。它不是一个复杂的系统，而更像一个安静的信息起点。保持开放，也保持审慎。
+    </p>
+
+</main>
+
+<footer>
+    <span>内容组织 · 产品说明式页面</span>
+</footer>
+
+</body>
+</html>
